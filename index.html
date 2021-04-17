@@ -10,7 +10,9 @@
 
 <body>
     <h1 id = "timer"></h1>
-    <h2 id = "high-scores">High Scores</h2>
+    <div id = "high-scores">
+        <h2><a href="scoreboard">High Scores</a></h2>
+    </div>    
     <div class = "container">
         <div id = "question-container" class = "hide">
             <div id = "question">Quiz Question</div>
@@ -20,13 +22,34 @@
                 <button class = "button">Answer 3</button>
                 <button class = "button">Answer 4</button>
             </div>
+            <div id = "end-screen" class = "hide">
+                <h3>You're finished!</h3>
+                <h4>Your final score is <span id = "score"></span> </h4>
+                <h4>
+                    Enter your initials: <input id = "initials" type="text">
+                </h4>
+                <button id = "submit-button" class = "submit-button button"> Submit Score</button>
+            </div>
         </div>        
         <div class = "controls">
             <button id = "start-button" class = "start-button button">Start</button>
             <button id = "next-button" class = "next-button button hide">Next</button>
+            <button id = "finish-button" class = "finish-button button hide">Finish</button>
+        </div>
+        <div id = "scoreboard" class = "hide">
+            <h3>Scoreboard</h3>
+             <ul>
+                 <li></li>
+                 <li></li>
+                 <li></li>
+                 <li></li>
+                 <li></li>
+             </ul>
+            <button id = "reset-button" class = "reset-button button"> Reset Scoreboard</button>
+            <button id = "restart-button" class = "restart-button button"> Play Again</button>
         </div>
     </div>
-
+    
     <script src="script.js"></script>
 </body>
 </html>

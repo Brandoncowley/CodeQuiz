@@ -1,8 +1,14 @@
 const startButton = document.getElementById("start-button")
 const nextButton = document.getElementById("next-button")
+const finishButton = document.getElementById("finish-button")
 const questionContainerElement = document.getElementById("question-container")
 const questionElement = document.getElementById("question")
 const answerButtonsElement = document.getElementById("answer-buttons")
+const endScreenElement = document.getElementById("end-screen")
+const submitButton = document.getElementById("submit-button")
+const scoreboardElement = document.getElementById("scoreboard")
+const resetButton = document.getElementById("reset-button")
+const restartButton = document.getElementById("restart-button")
 var timer = document.getElementById("timer")
 secondsLeft = 60
 
@@ -12,11 +18,16 @@ function setTime() {
     var timerInterval = setInterval(function() {
         secondsLeft--;
         timer.textContent = secondsLeft
-        if (secondsLeft === 0) {
+        if (secondsLeft == 0) {
+            endGame()
             clearInterval(timerInterval);
         }
     }, 1000)
 }
+document.getElementById('answer-buttons').addEventListener('click', function() {
+    secondsLeft -= 5;
+    document.getElementById('timer').textContentL='00:'+secondsLeft;
+});
 
 startButton.addEventListener("click", startGame)
 startButton.addEventListener("click", setTime)
@@ -25,6 +36,10 @@ nextButton.addEventListener("click", () => {
     setNextQuestion()
 })
 
+restartButton.addEventListener("click", startGame)
+restartButton.addEventListener("click", setTime)
+
+
 function startGame() {
     startButton.classList.add("hide")
     questionContainerElement.classList.remove("hide")
@@ -32,6 +47,7 @@ function startGame() {
     currentQuizQuestion = 0
     setNextQuestion()
 }
+console.log
 
 function setNextQuestion() {
     resetState()
@@ -61,30 +77,32 @@ function resetState() {
 function selectAnswer(e) {
     const selectedButton = e.target
     const correct = selectedButton.dataset.correct
-    setStatusClass(document.body, correct)
-    Array.from(answerButtonsElement.children).forEach(button => {
-        setStatusClass(button, button.dataset.correct)
-    })
     if (quizQuestions.length > currentQuizQuestion + 1) {
         nextButton.classList.remove("hide")
     } else {
-        startButton.innerText = "Restart"
-        startButton.classList.remove("hide")
+        finishButton.classList.remove("hide")
     }
 }
 
-function setStatusClass(element, correct) {
-    clearStatusClass(element)
-    if (correct) {
-        element.classList.add("correct")
-    }   else {
-        element.classList.add("wrong")
+finishButton.addEventListener("click", endGame)
+
+function endGame() {
+    finishButton.classList.add("hide")
+    questionElement.classList.add("hide")
+    answerButtonsElement.classList.add("hide")
+    endScreenElement.classList.remove("hide")
+    //stop timer, enter time value to scoreboard
+    timer.stop =  function() {
+        clearInterval(timerInterval);
     }
 }
-    
-function clearStatusClass(element) {
-    element.classList.remove("correct")
-    element.classList.remove("wrong")
+
+submitButton.addEventListener("click", submitScore)
+
+function submitScore() {
+    endScreenElement.classList.add("hide")
+    submitButton.classList.add("hide")
+    scoreboardElement.classList.remove("hide")
 }
 
 const questions = [
@@ -92,7 +110,7 @@ const questions = [
       question: "What is the HTML tag used to link your JavaScript sheet?",
       answers: [
         {text: "<script>", correct: true},
-        {text: "<scraped>", correct: false},
+        {text: "<scraped>", incorrect: false},
         {text: "<scrapped>", correct: false},
         {text: "<scooped>", correct: false},
       ]  
@@ -125,12 +143,12 @@ const questions = [
         ]  
       },
       {
-        question: "NUMBER 5?",
+        question: "Which function of an Array object adds an element to the end of an array  returns the new length of the array?",
         answers: [
-          {text: "var America = \"Red\", \"White\", \"Blue\"", correct: false},
-          {text: "var America = [\"Red\", \"White\", \"Blue\"]", correct: true},
-          {text: "var (America = Red, White, Blue)", correct: false},
-          {text: "var America = (1:\"Red\", 2:\"White\", 3:\"Blue\")", correct: false},
+          {text: "pop()", correct: false},
+          {text: "push()", correct: true},
+          {text: "join()", correct: false},
+          {text: "map()", correct: false},
         ]  
       },
 ]
