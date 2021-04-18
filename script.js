@@ -9,6 +9,7 @@ const submitButton = document.getElementById("submit-button")
 const scoreboardElement = document.getElementById("scoreboard")
 const resetButton = document.getElementById("reset-button")
 const restartButton = document.getElementById("restart-button")
+var highScorePage = document.getElementById("high-scores")
 var leaderBoard = document.getElementById("scores")
 var scores = []
 const finalScore = document.getElementById("score")
@@ -129,16 +130,31 @@ function submitScore() {
     populateScoreboard()
 }
 
+function resetGame() {
+  submitButton.classList.remove("hide")
+  nextButton.classList.remove("hide")
+  questionElement.classList.remove("hide")
+  answerButtonsElement.classList.remove("hide")
+  endScreenElement.classList.add("hide")
+  scoreboardElement.classList.add("hide")
+  startGame()
+  secondsLeft = 60
+}
+
 restartButton.addEventListener("click", resetGame) 
-  function resetGame() {
-    startGame()
-    setTime()
-    secondsLeft = 60
+
+resetButton.addEventListener("click", clearBoard)
+  function clearBoard() {
+    scores = []
+    populateScoreboard()
   }
 
-
-
-
+highScorePage.addEventListener("click", showScores)
+  function showScores() {
+    scoreboardElement.classList.remove("hide")
+    questionElement.classList.add("hide")
+  answerButtonsElement.classList.add("hide")
+  }
 
 const questions = [
     {
