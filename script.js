@@ -1,4 +1,5 @@
 const startButton = document.getElementById("start-button")
+const titleScreen = document.getElementById("title-screen")
 const nextButton = document.getElementById("next-button")
 const finishButton = document.getElementById("finish-button")
 const questionContainerElement = document.getElementById("question-container")
@@ -27,7 +28,7 @@ function setTime() {
         if (secondsLeft == 0) {
             endGame()
             clearInterval(timerInterval);
-            console.log("setinterval")
+            nextButton.classList.add("hide")
         }
     }, 1000)
 }
@@ -46,6 +47,7 @@ restartButton.addEventListener("click", setTime)
 function startGame() {
     startButton.classList.add("hide")
     questionContainerElement.classList.remove("hide")
+    titleScreen.classList.add("hide")
     quizQuestions = questions
     currentQuizQuestion = 0
     setNextQuestion()
@@ -130,7 +132,7 @@ function submitScore() {
     populateScoreboard()
 }
 
-function resetGame() {
+function resetGame() {//NEED TO RESET STATES CORRECTLY TO BEGIN THE TEST AGAIN
   submitButton.classList.remove("hide")
   nextButton.classList.remove("hide")
   questionElement.classList.remove("hide")
