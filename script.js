@@ -9,25 +9,27 @@ const submitButton = document.getElementById("submit-button")
 const scoreboardElement = document.getElementById("scoreboard")
 const resetButton = document.getElementById("reset-button")
 const restartButton = document.getElementById("restart-button")
+var leaderBoard = document.getElementById("scores")
+var scores = []
+const finalScore = document.getElementById("score")
+var userName = document.getElementById("initials")
 var timer = document.getElementById("timer")
 secondsLeft = 60
 
 let quizQuestions, currentQuizQuestion
-
+timerInterval = null
+//TIMER needs to be declared globally, cannot be called twice or live inside of the function for setTime
 function setTime() {
-    var timerInterval = setInterval(function() {
+    timerInterval = setInterval(function() {
         secondsLeft--;
         timer.textContent = secondsLeft
         if (secondsLeft == 0) {
             endGame()
             clearInterval(timerInterval);
+            console.log("setinterval")
         }
     }, 1000)
 }
-document.getElementById('answer-buttons').addEventListener('click', function() {
-    secondsLeft -= 5;
-    document.getElementById('timer').textContentL='00:'+secondsLeft;
-});
 
 startButton.addEventListener("click", startGame)
 startButton.addEventListener("click", setTime)
@@ -46,8 +48,8 @@ function startGame() {
     quizQuestions = questions
     currentQuizQuestion = 0
     setNextQuestion()
+    
 }
-console.log
 
 function setNextQuestion() {
     resetState()
@@ -60,11 +62,19 @@ function showQuestion(question) {
         const button = document.createElement("button")
         button.innerText = answer.text
         button.classList.add("button")
+        //IF statement creates argument for timer to decrement if the wrong button is selected
         if (answer.correct) {
-            button.dataset.correct = answer.correct
-        }
-        button.addEventListener("click", selectAnswer)
-        answerButtonsElement.appendChild(button)
+          button.addEventListener("click", function(e) {
+            selectAnswer(e)
+          })
+       } else {
+          button.addEventListener("click", function(e) {
+            selectAnswer(e)
+            secondsLeft -= 5;
+          })
+       }
+        
+       answerButtonsElement.appendChild(button)
     })
 }
 function resetState() {
@@ -92,25 +102,50 @@ function endGame() {
     answerButtonsElement.classList.add("hide")
     endScreenElement.classList.remove("hide")
     //stop timer, enter time value to scoreboard
-    timer.stop =  function() {
+    //initials need to go to scoreboard
         clearInterval(timerInterval);
-    }
+    finalScore.innerText = (secondsLeft)
 }
 
 submitButton.addEventListener("click", submitScore)
+function populateScoreboard() {
+  leaderBoard.innerHTML = ""
+  for (i = 0; i < scores.length; i++) {
+    var players = document.createElement("li")
+        players.innerText = scores[i][0]+", "+scores[i][1]
+        leaderBoard.appendChild(players)
+  }
+}
+
 
 function submitScore() {
     endScreenElement.classList.add("hide")
     submitButton.classList.add("hide")
     scoreboardElement.classList.remove("hide")
+    scores.push([finalScore.innerHTML, userName.value])
+    scores.sort(function(a, b) {
+     return b[0] - a[0]
+    })
+    populateScoreboard()
 }
+
+restartButton.addEventListener("click", resetGame) 
+  function resetGame() {
+    startGame()
+    setTime()
+    secondsLeft = 60
+  }
+
+
+
+
 
 const questions = [
     {
       question: "What is the HTML tag used to link your JavaScript sheet?",
       answers: [
         {text: "<script>", correct: true},
-        {text: "<scraped>", incorrect: false},
+        {text: "<scraped>", correct: false},
         {text: "<scrapped>", correct: false},
         {text: "<scooped>", correct: false},
       ]  
